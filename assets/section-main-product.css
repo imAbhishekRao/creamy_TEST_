@@ -32,14 +32,36 @@ product-info {
     position: sticky;
     top: 0;
     z-index: 1;
-    height: fit-content;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
     transition: all 0.3s ease;
+  }
+
+  /* Ensure images stay fixed initially */
+  .product__media-wrapper .product__media {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    max-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   /* When product info has scrolled past, make images scroll normally */
   .product__media-wrapper.scroll-past-info {
     position: relative;
     top: auto;
+    height: auto;
+    max-height: none;
+  }
+
+  .product__media-wrapper.scroll-past-info .product__media {
+    position: relative;
+    top: auto;
+    height: auto;
+    max-height: none;
   }
 
   .product--thumbnail .thumbnail-list {

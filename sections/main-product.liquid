@@ -2474,7 +2474,14 @@ document.addEventListener('DOMContentLoaded', function() {
   
   if (!productMediaWrapper || !productInfoWrapper) return;
   
+  // Ensure images are fixed initially
+  productMediaWrapper.style.position = 'sticky';
+  productMediaWrapper.style.top = '0';
+  productMediaWrapper.style.height = '100vh';
+  productMediaWrapper.style.maxHeight = '100vh';
+  
   let ticking = false;
+  let isScrolledPast = false;
   
   function updateStickyImages() {
     const scrollTop = window.scrollY;
@@ -2483,16 +2490,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const productInfoTop = productInfoRect.top + scrollTop;
     const productInfoBottom = productInfoTop + productInfoHeight;
     
-    // Calculate when product info has scrolled past the viewport
+    // Calculate when product info has completely scrolled past the viewport
     const viewportHeight = window.innerHeight;
     const productInfoScrolledPast = scrollTop + viewportHeight > productInfoBottom;
     
-    if (productInfoScrolledPast) {
+    if (productInfoScrolledPast && !isScrolledPast) {
       // Product info has scrolled past, make images scroll normally
       productMediaWrapper.classList.add('scroll-past-info');
-    } else {
-      // Product info is still visible, keep images sticky
+      productMediaWrapper.style.position = 'relative';
+      productMediaWrapper.style.top = 'auto';
+      productMediaWrapper.style.height = 'auto';
+      productMediaWrapper.style.maxHeight = 'none';
+      isScrolledPast = true;
+    } else if (!productInfoScrolledPast && isScrolledPast) {
+      // Product info is back in view, make images sticky again
       productMediaWrapper.classList.remove('scroll-past-info');
+      productMediaWrapper.style.position = 'sticky';
+      productMediaWrapper.style.top = '0';
+      productMediaWrapper.style.height = '100vh';
+      productMediaWrapper.style.maxHeight = '100vh';
+      isScrolledPast = false;
     }
     
     ticking = false;
@@ -2514,10 +2531,19 @@ document.addEventListener('DOMContentLoaded', function() {
   // Listen for resize events to recalculate on screen size changes
   window.addEventListener('resize', function() {
     if (window.innerWidth >= 750) {
+      // Reset to sticky on desktop
+      productMediaWrapper.style.position = 'sticky';
+      productMediaWrapper.style.top = '0';
+      productMediaWrapper.style.height = '100vh';
+      productMediaWrapper.style.maxHeight = '100vh';
       updateStickyImages();
     } else {
       // On mobile, remove sticky behavior
       productMediaWrapper.classList.remove('scroll-past-info');
+      productMediaWrapper.style.position = 'relative';
+      productMediaWrapper.style.top = 'auto';
+      productMediaWrapper.style.height = 'auto';
+      productMediaWrapper.style.maxHeight = 'none';
     }
   });
 });
