@@ -1,0 +1,607 @@
+
+ <style>
+  .custom-complementary-products .card__media .media {
+    height: 100%;
+}
+.custom-complementary-products .complementary-products__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+.custom-complementary-products h2.h3.accordion__title {
+    text-align: center;
+    font-weight: 400;
+    font-size: 18.9px;
+}
+
+.custom-complementary-products .summary__title {
+    text-align: center;
+    font-weight: 400;
+}
+
+.custom-complementary-products .contains-card {
+    background: #FAF8F5;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 15px;
+    padding: 30px 0;
+}
+.custom-complementary-products .card.card--standard.card--media {
+    min-height: 383px;
+}
+.custom-complementary-products .card-wrapper.product-card-wrapper {
+    {% comment %} padding: 20px; {% endcomment %}
+    background: #fff;
+}
+.custom-complementary-products .card__badge.bottom.left {
+    align-self: flex-start;
+    grid-row-start: 1;
+    border-radius: 0;
+}
+
+.custom-complementary-products .card__badge.bottom.left span {
+        border-radius: 4px;
+    padding: 10px 15px;
+}
+.custom-complementary-products button.quick-add__submit.button.button--full-width.button--secondary {
+    border: 1px solid #2D2D2F;
+    color: #2D2D2F;
+}
+.complementary-slide.complementary-slide--standard{
+    min-width: 275px;
+}
+ .custom-lg-hide {
+display:none;
+} 
+@media (max-width: 1024px) {
+  .custom-complementary-products {
+    display: none !important;
+  }
+   .custom-lg-hide {
+display:flex;
+} 
+}
+ </style> 
+
+<section id="complementary-products-section-{{ section.id }}" class="complementary-products-sectio custom-complementary-products lg-hidden">
+  <product-recommendations
+    class="complementary-products quick-add-hidden{% if section.settings.make_collapsible_row %} is-accordion{% endif %}{% if section.settings.enable_quick_add %} complementary-products-contains-quick-add{% endif %}"
+    data-url="{{ routes.product_recommendations_url }}?limit={{ section.settings.product_list_limit }}&intent=complementary"
+    data-section-id="{{ section.id }}"
+    data-product-id="{{ product.id }}"
+  >
+    {%- if recommendations.performed and recommendations.products_count > 0 -%}
+      <aside
+        aria-label="{{ 'accessibility.complementary_products' | t }}"
+        {% if section.settings.make_collapsible_row %}
+          class="product__accordion accordion"
+        {% endif %}
+      >
+        <div class="complementary-products__container">
+          {%- if section.settings.make_collapsible_row -%}
+            <details id="Details-{{ section.id }}" open>
+              <summary>
+          {%- endif %}
+          <div class="summary__title">
+            {%- if section.settings.make_collapsible_row -%}
+              {% render 'icon-accordion', icon: section.settings.icon %}
+              <h2 class="h4 accordion__title">{{ section.settings.block_heading }}</h2>
+            {%- else -%}
+              <h2 class="h3 accordion__title">{{ section.settings.block_heading }}</h2>
+            {%- endif -%}
+          </div>
+          {%- if section.settings.make_collapsible_row -%}
+            {{- 'icon-caret.svg' | inline_asset_content -}}
+            </summary>
+          {%- endif -%}
+          <slideshow-component class="slider-mobile-gutter">
+            {%- assign number_of_slides = recommendations.products_count
+              | plus: 0.0
+              | divided_by: section.settings.products_per_page
+              | ceil
+            -%}
+           <div
+  id="Slider-{{ section.id }}"
+  class="contains-card contains-card--product complementary-slider grid grid--6-col slider slider--everywhere"
+  role="list"
+  {% if number_of_slides > 1 %}
+    aria-label="{{ 'general.slider.name' | t }}"
+  {% endif %}
+>
+  {%- for product in recommendations.products
+    limit: section.settings.products_per_page
+    offset: continue
+  -%}
+    <div class="complementary-slide complementary-slide--{{ settings.card_style }} "
+      tabindex="-1"
+      role="group"
+      {% if number_of_slides > 1 %}
+        aria-roledescription="{{ 'sections.slideshow.slide' | t }}"
+        aria-label="{{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}"
+      {% endif %}
+    >
+      {% render 'custom-card-product',
+        card_product: product,
+        media_aspect_ratio: section.settings.image_ratio,
+        show_secondary_image: false,
+        lazy_load: false,
+        quick_add: "none",
+        section_id: section.id,
+        block:section
+        
+      %}
+    </div>
+  {%- endfor -%}
+</div>
+
+            {%- if number_of_slides > 1 -%}
+              <div class="slider-buttons">
+                <button
+                  type="button"
+                  class="slider-button slider-button--prev"
+                  name="previous"
+                  aria-label="{{ 'general.slider.previous_slide' | t }}"
+                >
+                  <span class="svg-wrapper">
+                    {{- 'icon-caret.svg' | inline_asset_content -}}
+                  </span>
+                </button>
+                <div class="slider-counter slider-counter--{{ section.settings.pagination_style }}{% if section.settings.pagination_style == 'counter' or section.settings.pagination_style == 'numbers' %} caption{% endif %}">
+                  {%- if section.settings.pagination_style == 'counter' -%}
+                    <span class="slider-counter--current">1</span>
+                    <span aria-hidden="true"> / </span>
+                    <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
+                    <span class="slider-counter--total">{{ number_of_slides }}</span>
+                  {%- else -%}
+                    <div class="slideshow__control-wrapper">
+                      {%- for i in (1..number_of_slides) -%}
+                        <button
+                          class="slider-counter__link slider-counter__link--{{ section.settings.pagination_style }} link"
+                          aria-label="{{ 'sections.slideshow.load_slide' | t }} {{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}"
+                          aria-controls="Slider-{{ section.id }}"
+                        >
+                          {%- if section.settings.pagination_style == 'numbers' -%}
+                            {{ forloop.index -}}
+                          {%- else -%}
+                            <span class="dot"></span>
+                          {%- endif -%}
+                        </button>
+                      {%- endfor -%}
+                    </div>
+                  {%- endif -%}
+                </div>
+                <button
+                  type="button"
+                  class="slider-button slider-button--next"
+                  name="next"
+                  aria-label="{{ 'general.slider.next_slide' | t }}"
+                >
+                  <span class="svg-wrapper">
+                    {{- 'icon-caret.svg' | inline_asset_content -}}
+                  </span>
+                </button>
+              </div>
+            {%- endif -%}
+          </slideshow-component>
+          {%- if section.settings.make_collapsible_row -%}
+            </details>
+          {%- endif -%}
+        </div>
+      </aside>
+    {%- endif -%}
+    {{ 'component-card.css' | asset_url | stylesheet_tag }}
+    {{ 'component-complementary-products.css' | asset_url | stylesheet_tag }}
+    {%- if section.settings.enable_quick_add -%}
+      {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+      <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
+  </product-recommendations>
+</section>
+
+{% schema %}
+{
+  "name": "Complementary Products",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "block_heading",
+      "label": "Heading",
+      "default": "You may also like"
+    },
+    {
+      "type": "checkbox",
+      "id": "make_collapsible_row",
+      "label": "Collapsible Row",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "Accordion Icon",
+      "options": [
+        { "value": "plus", "label": "Plus" },
+        { "value": "chevron", "label": "Chevron" }
+      ],
+      "default": "plus"
+    },
+    {
+      "type": "range",
+      "id": "product_list_limit",
+      "label": "Product List Limit",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products Per Page",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "pagination_style",
+      "label": "Pagination Style",
+      "options": [
+        { "value": "dots", "label": "Dots" },
+        { "value": "numbers", "label": "Numbers" },
+        { "value": "counter", "label": "Counter" }
+      ],
+      "default": "dots"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image Ratio",
+      "options": [
+        { "value": "portrait", "label": "Portrait" },
+        { "value": "square", "label": "Square" }
+      ],
+      "default": "portrait"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_quick_add",
+      "label": "Enable Quick Add",
+      "default": false
+    }
+    ,
+    {
+      
+          "type": "select",
+          "id": "picker_type",
+          "options": [
+            {
+              "value": "dropdown",
+              "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type.options__1.label"
+            },
+            {
+              "value": "button",
+              "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type.options__2.label"
+            }
+          ],
+          "default": "button",
+          "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type.label"
+        },
+        {
+          "id": "swatch_shape",
+          "label": "t:sections.main-product.blocks.variant_picker.settings.swatch_shape.label",
+          "type": "select",
+          "info": "t:sections.main-product.blocks.variant_picker.settings.swatch_shape.info",
+          "options": [
+            {
+              "value": "circle",
+              "label": "t:sections.main-product.blocks.variant_picker.settings.swatch_shape.options__1.label"
+            },
+            {
+              "value": "square",
+              "label": "t:sections.main-product.blocks.variant_picker.settings.swatch_shape.options__2.label"
+            },
+            {
+              "value": "none",
+              "label": "t:sections.main-product.blocks.variant_picker.settings.swatch_shape.options__3.label"
+            }
+          ],
+          "default": "circle"
+        }
+      
+    
+  ],
+  "presets": [
+    {
+      "name": "Custom Complementary Products"
+    }
+  ]
+}
+{% endschema %}
+
+{% comment %} 
+ <style>
+.custom-complementary-products .complementary-products__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+.custom-complementary-products h2.h3.accordion__title {
+    text-align: center;
+    font-weight: 400;
+    font-size: 18.9px;
+}
+
+.custom-complementary-products .summary__title {
+    text-align: center;
+    font-weight: 400;
+}
+
+.custom-complementary-products .contains-card {
+    background: #FAF8F5;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 15px;
+    padding: 30px 0;
+}
+.custom-complementary-products .card.card--standard.card--media {
+    min-height: 383px;
+}
+.custom-complementary-products .card-wrapper.product-card-wrapper {
+    padding: 20px;
+    background: #fff;
+}
+.custom-complementary-products .card__badge.bottom.left {
+    align-self: flex-start;
+    grid-row-start: 1;
+    border-radius: 0;
+}
+
+.custom-complementary-products .card__badge.bottom.left span {
+        border-radius: 4px;
+    padding: 10px 15px;
+}
+.custom-complementary-products button.quick-add__submit.button.button--full-width.button--secondary {
+    border: 1px solid #2D2D2F;
+    color: #2D2D2F;
+}
+.complementary-slide.complementary-slide--standard{
+    max-width: 300px;
+}
+ .custom-lg-hide {
+display:none;
+} 
+@media (max-width: 1024px) {
+  .custom-complementary-products {
+    display: none !important;
+  }
+   .custom-lg-hide {
+display:flex;
+} 
+}
+ </style> 
+
+<section id="complementary-products-section-{{ section.id }}" class="complementary-products-sectio custom-complementary-products lg-hidden">
+  <product-recommendations
+    class="complementary-products quick-add-hidden{% if section.settings.make_collapsible_row %} is-accordion{% endif %}{% if section.settings.enable_quick_add %} complementary-products-contains-quick-add{% endif %}"
+    data-url="{{ routes.product_recommendations_url }}?limit={{ section.settings.product_list_limit }}&intent=complementary"
+    data-section-id="{{ section.id }}"
+    data-product-id="{{ product.id }}"
+  >
+    {%- if recommendations.performed and recommendations.products_count > 0 -%}
+      <aside
+        aria-label="{{ 'accessibility.complementary_products' | t }}"
+        {% if section.settings.make_collapsible_row %}
+          class="product__accordion accordion"
+        {% endif %}
+      >
+        <div class="complementary-products__container">
+          {%- if section.settings.make_collapsible_row -%}
+            <details id="Details-{{ section.id }}" open>
+              <summary>
+          {%- endif %}
+          <div class="summary__title">
+            {%- if section.settings.make_collapsible_row -%}
+              {% render 'icon-accordion', icon: section.settings.icon %}
+              <h2 class="h4 accordion__title">{{ section.settings.block_heading }}</h2>
+            {%- else -%}
+              <h2 class="h3 accordion__title">{{ section.settings.block_heading }}</h2>
+            {%- endif -%}
+          </div>
+          {%- if section.settings.make_collapsible_row -%}
+            {{- 'icon-caret.svg' | inline_asset_content -}}
+            </summary>
+          {%- endif -%}
+          <slideshow-component class="slider-mobile-gutter">
+            {%- assign number_of_slides = recommendations.products_count
+              | plus: 0.0
+              | divided_by: section.settings.products_per_page
+              | ceil
+            -%}
+           <div
+  id="Slider-{{ section.id }}"
+  class="contains-card contains-card--product complementary-slider grid grid--4-col slider slider--everywhere"
+  role="list"
+  {% if number_of_slides > 1 %}
+    aria-label="{{ 'general.slider.name' | t }}"
+  {% endif %}
+>
+  {%- for product in recommendations.products
+    limit: section.settings.products_per_page
+    offset: continue
+  -%}
+    <div class="complementary-slide complementary-slide--{{ settings.card_style }} "
+      tabindex="-1"
+      role="group"
+      {% if number_of_slides > 1 %}
+        aria-roledescription="{{ 'sections.slideshow.slide' | t }}"
+        aria-label="{{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}"
+      {% endif %}
+    >
+      {% render 'card-product',
+        card_product: product,
+        media_aspect_ratio: section.settings.image_ratio,
+        show_secondary_image: false,
+        lazy_load: false,
+        quick_add: "standard",
+        section_id: section.id,
+        
+      %}
+    </div>
+  {%- endfor -%}
+</div>
+
+            {%- if number_of_slides > 1 -%}
+              <div class="slider-buttons">
+                <button
+                  type="button"
+                  class="slider-button slider-button--prev"
+                  name="previous"
+                  aria-label="{{ 'general.slider.previous_slide' | t }}"
+                >
+                  <span class="svg-wrapper">
+                    {{- 'icon-caret.svg' | inline_asset_content -}}
+                  </span>
+                </button>
+                <div class="slider-counter slider-counter--{{ section.settings.pagination_style }}{% if section.settings.pagination_style == 'counter' or section.settings.pagination_style == 'numbers' %} caption{% endif %}">
+                  {%- if section.settings.pagination_style == 'counter' -%}
+                    <span class="slider-counter--current">1</span>
+                    <span aria-hidden="true"> / </span>
+                    <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
+                    <span class="slider-counter--total">{{ number_of_slides }}</span>
+                  {%- else -%}
+                    <div class="slideshow__control-wrapper">
+                      {%- for i in (1..number_of_slides) -%}
+                        <button
+                          class="slider-counter__link slider-counter__link--{{ section.settings.pagination_style }} link"
+                          aria-label="{{ 'sections.slideshow.load_slide' | t }} {{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}"
+                          aria-controls="Slider-{{ section.id }}"
+                        >
+                          {%- if section.settings.pagination_style == 'numbers' -%}
+                            {{ forloop.index -}}
+                          {%- else -%}
+                            <span class="dot"></span>
+                          {%- endif -%}
+                        </button>
+                      {%- endfor -%}
+                    </div>
+                  {%- endif -%}
+                </div>
+                <button
+                  type="button"
+                  class="slider-button slider-button--next"
+                  name="next"
+                  aria-label="{{ 'general.slider.next_slide' | t }}"
+                >
+                  <span class="svg-wrapper">
+                    {{- 'icon-caret.svg' | inline_asset_content -}}
+                  </span>
+                </button>
+              </div>
+            {%- endif -%}
+          </slideshow-component>
+          {%- if section.settings.make_collapsible_row -%}
+            </details>
+          {%- endif -%}
+        </div>
+      </aside>
+    {%- endif -%}
+    {{ 'component-card.css' | asset_url | stylesheet_tag }}
+    {{ 'component-complementary-products.css' | asset_url | stylesheet_tag }}
+    {%- if section.settings.enable_quick_add -%}
+      {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+      <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
+  </product-recommendations>
+</section>
+
+{% schema %}
+{
+  "name": "Complementary Products",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "block_heading",
+      "label": "Heading",
+      "default": "You may also like"
+    },
+    {
+      "type": "checkbox",
+      "id": "make_collapsible_row",
+      "label": "Collapsible Row",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "Accordion Icon",
+      "options": [
+        { "value": "plus", "label": "Plus" },
+        { "value": "chevron", "label": "Chevron" }
+      ],
+      "default": "plus"
+    },
+    {
+      "type": "range",
+      "id": "product_list_limit",
+      "label": "Product List Limit",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products Per Page",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "pagination_style",
+      "label": "Pagination Style",
+      "options": [
+        { "value": "dots", "label": "Dots" },
+        { "value": "numbers", "label": "Numbers" },
+        { "value": "counter", "label": "Counter" }
+      ],
+      "default": "dots"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image Ratio",
+      "options": [
+        { "value": "portrait", "label": "Portrait" },
+        { "value": "square", "label": "Square" }
+      ],
+      "default": "portrait"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_quick_add",
+      "label": "Enable Quick Add",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Complementary Products"
+    }
+  ]
+}
+{% endschema %} {% endcomment %}
+
+
+{% comment %}
+  Standalone Complementary Products Section
+  Extracted from main-product.liquid to allow placement anywhere in the theme
+  Uses Shopify Product Recommendations API (intent=complementary)
+{% endcomment %}

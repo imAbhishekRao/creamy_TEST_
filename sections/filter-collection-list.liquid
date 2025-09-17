@@ -1,0 +1,290 @@
+<!-- Collection List Section with Filtering -->
+<style>
+  .collection-list-section {
+    padding: 60px 0;
+  }
+  
+  .collection-heading {
+    font-size: 30px;
+    font-weight: bold;
+    margin: 0;
+    text-align: center;
+  }
+  
+  .collection-subheading {
+    font-size: 14px;
+    margin: 0;
+    text-align: center;
+    margin-bottom: 40px;
+    letter-spacing:0;
+  }
+  
+  .filter-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  
+  .filter-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size:12px;
+    color:#787572;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: normal;
+    position: relative;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  
+  .filter-btn::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #000;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+  
+  .filter-btn:hover::after,
+  .filter-btn.active::after {
+    transform: scaleX(1);
+  }
+  
+  .filter-btn.active {
+   color:#2d2a26;
+  }
+
+  .collections-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width:1440px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .collection-item {
+    text-align: center;
+    transition: opacity 0.3s ease;
+  }
+  
+  .collection-item.hidden {
+    display: none;
+  }
+  
+  .collection-item a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .collection-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+  }
+  
+  .collection-title {
+    font-size: 24px;
+    margin: 15px 0 0 0;
+    color: inherit;
+    font-family: Inter, sans-serif;
+  }
+  
+  @media (max-width: 768px) {
+    .collections-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      padding: 0 10px;
+    }
+    
+    .filter-buttons {
+      gap: 20px;
+      padding: 0 10px;
+    }
+    
+    .filter-btn {
+      {% comment %} padding: 10px 16px; {% endcomment %}
+      font-size: 14px;
+    }
+     .collection-title {
+       font-family: Inter, sans-serif;
+    font-weight: 700;
+    letter-spacing: 0;
+    font-size:16px;
+  }
+  }
+</style>
+
+<div class="collection-list-section">
+  <div class="container">
+    {% if section.settings.heading != blank %}
+      <h2 class="collection-heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+    
+    {% if section.settings.subheading != blank %}
+      <p class="collection-subheading"><strong>{{ section.settings.subheading }}</strong></p>
+    {% endif %}
+    
+    <!-- Filter Buttons -->
+    <div class="filter-buttons">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="women">Women</button>
+      <button class="filter-btn" data-filter="men">Men</button>
+    </div>
+    
+    <!-- Collections Grid -->
+    <div class="collections-grid">
+      {% for block in section.blocks %}
+        {% if block.settings.collection != blank %}
+          <div class="collection-item" data-category="{{ block.settings.category }}">
+            <a href="{{ collections[block.settings.collection].url }}">
+              {% if block.settings.custom_image != blank %}
+                <img 
+                  src="{{ block.settings.custom_image | image_url: width: 453 }}" 
+                  alt="{{ collections[block.settings.collection].title }}"
+                  class="collection-image"
+                  width="453" 
+                  
+                >
+              {% elsif collections[block.settings.collection].featured_image %}
+                <img 
+                  src="{{ collections[block.settings.collection].featured_image | image_url: width: 453 }}" 
+                  alt="{{ collections[block.settings.collection].title }}"
+                  class="collection-image"
+                  width="453" 
+                 
+                >
+              {% else %}
+                <div class="collection-image" style="background-color: #f5f5f5; display: flex; align-items: center; justify-content: center;">
+                  <span>No Image</span>
+                </div>
+              {% endif %}
+              <h3 class="collection-title">
+                {% if block.settings.custom_title != blank %}
+                  {{ block.settings.custom_title }}
+                {% else %}
+                  {{ collections[block.settings.collection].title }}
+                {% endif %}
+              </h3>
+            </a>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const collectionItems = document.querySelectorAll('.collection-item');
+    
+    filterButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const filter = this.getAttribute('data-filter');
+        
+        // Update active button
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Filter collections
+        collectionItems.forEach(item => {
+          const category = item.getAttribute('data-category');
+          
+          if (filter === 'all') {
+            // Show all collections regardless of category
+            item.classList.remove('hidden');
+          } else if (category === filter) {
+            // Show only collections matching the selected filter
+            item.classList.remove('hidden');
+          } else {
+            // Hide collections that don't match
+            item.classList.add('hidden');
+          }
+        }); 
+        });
+      });
+    });
+ 
+</script>
+
+{% schema %}
+{
+  "name": "Collection Filter",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Shop Collections",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "default": "Discover our curated collections",
+      "label": "Subheading"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Custom Title (optional)",
+          "info": "Leave blank to use collection title"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image",
+          "label": "Custom Image (optional)",
+          "info": "Leave blank to use collection's featured image"
+        },
+        {
+          "type": "select",
+          "id": "category",
+          "label": "Category",
+          "options": [
+            {
+              "value": "all",
+              "label": "All"
+            },
+            {
+              "value": "women",
+              "label": "Women"
+            },
+            {
+              "value": "men",
+              "label": "Men"
+            }
+          ],
+          "default": "all"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection List with Filter"
+    }
+  ]
+}
+{% endschema %}

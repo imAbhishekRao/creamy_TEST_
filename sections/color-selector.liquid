@@ -1,0 +1,30 @@
+{% assign color_groups = product.metafields.custom.color_groups %}
+{% assign current_color = product.selected_or_first_available_variant.option1 %}
+
+<div class="color-selector">
+  {% for group in color_groups %}
+    <div class="color-group">
+      <p class="group-title">{{ group[0] }}</p>
+      <div class="swatches">
+        {% for color in group[1] %}
+          {% assign variant = product.variants | where: "option1", color | first %}
+          {% if variant %}
+            <label class="color-swatch {% if variant.option1 == current_color %}active{% endif %}">
+              <input
+                type="radio"
+                name="Color"
+                value="{{ variant.option1 }}"
+                {% if variant.option1 == current_color %}checked{% endif %}
+                hidden
+              >
+              <span style="background-color: {{ variant.metafields.custom.swatch_color }}"></span>
+            </label>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+{% render 'color-selector-css' %}
+

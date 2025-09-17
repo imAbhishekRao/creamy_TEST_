@@ -1,0 +1,156 @@
+{% schema %}
+{
+  "name": "Track & Return Buttons",
+  "settings": [
+    {
+      "type": "url",
+      "id": "track_order_link",
+      "label": "Track your Order link"
+    },
+    {
+      "type": "url",
+      "id": "us_return_link",
+      "label": "U.S. Return or Exchange link"
+    },
+    {
+      "type": "url",
+      "id": "intl_return_link",
+      "label": "International Return link"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_a",
+      "label": "Icon 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_b",
+      "label": "icon 2"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.collapsible_content.settings.section_color_scheme.label",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Track & Return Buttons"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="color-{{ section.settings.color_scheme }}{% if section.settings.background_image != blank %} background-media{% endif %} custom-section-track" >
+   <div class="image-container">{{ section.settings.background_image | image_url: width:1500 ,height:1500 | image_tag }}</div>
+  
+  <div class="page-width content color-{{ section.settings.color_scheme }}" >
+    <div class="grid grid--1-col">
+      
+     
+      <a href="{{ section.settings.track_order_link }}" class="button button--secondary button--full-width color-background-1" style="justify-content: space-between; display: flex; align-items: center;">
+        <span style="display: flex; align-items: center; gap: 1.6rem;">
+          
+          {% if section.settings.icon_a != blank %}
+       {{ section.settings.icon_a | image_url: width:37 ,height:46 | image_tag }}
+        {% endif %}
+          Track your Order
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 5l7 7-7 7"/>
+        </svg>
+      </a>
+
+      <!-- Start U.S. Return or Exchange -->
+      <a href="{{ section.settings.us_return_link }}" class="button button--secondary button--full-width color-background-1" style="justify-content: space-between; display: flex; align-items: center; margin-top: 1rem;">
+        <span style="display: flex; align-items: center; gap: 1.6rem;">
+         
+          {% if section.settings.icon_b != blank %}
+          {{ section.settings.icon_b | image_url: width:41 ,height:26 | image_tag}}
+          {% endif %}
+          Start U.S. Return or Exchange
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 5l7 7-7 7"/>
+        </svg>
+      </a>
+
+      
+      <p class="caption-with-letter-spacing" >
+       Start Return Outside the U.S.
+      </p>
+    </div>
+  </div>
+</div>
+
+
+<style>
+  
+.custom-section-track {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.custom-section-track .image-container {
+    
+    width: 100%;
+    height: 100%;
+    max-height: 445px;
+    z-index: 0;
+}
+
+.custom-section-track .image-container img {
+    width: 100%;
+    height: auto;
+    max-height: 445px;
+}
+
+.custom-section-track .page-width.content {
+    position: absolute;
+    top: 12%;
+    background: transparent;
+    max-width: 499px;
+    
+}
+
+
+
+.custom-section-track .button:after {
+    
+    border: none;
+    box-shadow: none;
+    
+    border-radius: 6px;
+    color: #fff;
+}
+
+.custom-section-track .button:before {
+    background: #F2F8FB;
+    border-radius: 6px;
+}
+
+.custom-section-track a.button.button--secondary.button--full-width {
+    border-radius: 6px;
+    min-height: 91px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #3B3E41;
+    padding-left: 20px;
+}
+
+.custom-section-track p.caption-with-letter-spacing {
+    text-align: center;
+    margin: 30px auto;
+    font-size: 20px;
+    font-weight: 400;
+    text-decoration: none;
+    color: #646F7A;
+}
+</style>

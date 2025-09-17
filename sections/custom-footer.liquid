@@ -1,0 +1,273 @@
+<!-- Footer Strip -->
+<div class="footer-strip">
+  Everyone Feel comfortable in cremy
+</div>
+
+<!-- Footer -->
+<div class="footer-wrapper">
+  <div class="footer-grid">
+    
+    <!-- LOGO -->
+    <div class="footer-col logo">
+      <img src="https://cdn.shopify.com/s/files/1/0648/5298/3875/files/cf_logo_neu_schwarz.png?v=1754387905" alt="{{ shop.name }}" width="230px" height="80px">
+    </div>
+
+    <!-- MENU -->
+    <div class="footer-col">
+      <h4>Menu</h4>
+      <ul>
+        <li><a href="/pages/help">Hilfeseite</a></li>
+        <li><a href="/pages/returns">Umtausch / Retoure anmelden</a></li>
+        <li><a href="/pages/contact">Kontaktinformationen</a></li>
+        <li><a href="/pages/shipping">shipment tracking</a></li>
+        <li><a href="/pages/shipping-costs">Versand- und Rücksendekosten</a></li>
+        {% comment %} <li><a href="/account">Kunden Login & Registrierung</a></li> {% endcomment %}
+      </ul>
+    </div>
+
+    <!-- INFORMATION -->
+    <div class="footer-col">
+      <h4>Information</h4>
+      <ul>
+        <li><a href="/pages/career">Karriere</a></li>
+        <li><a href="/policies/shipping-policy">Versandbedingungen</a></li>
+        <li><a href="/policies/refund-policy">Widerrufsrecht</a></li>
+        <li><a href="/policies/terms-of-service">Allgemeine Geschäftsbedingungen</a></li>
+        <li><a href="/pages/terms">Teilnahmebedingungen</a></li>
+        <li><a href="/policies/privacy-policy">Datenschutzerklärung</a></li>
+        <li><a href="/pages/impressum">Impressum</a></li>
+      </ul>
+    </div>
+
+    <!-- NEWSLETTER -->
+    <div class="footer-col">
+      <h4>CREAMY NEWSLETTER</h4>
+      <p>Abonniere unser Newsletter und genieße exklusive creamy fabrics-Deals und Neuheiten!</p>
+      
+      {% form 'customer' %}
+        <input type="email" name="contact[email]" placeholder="Your email" required>
+        <button type="submit">→</button>
+      {% endform %}
+
+      <div class="social">
+        <h5>FOLLOW US</h5>
+        <div class="social-icons">
+          
+          <!-- Instagram -->
+          <a href="YOUR_INSTAGRAM_LINK" target="_blank" rel="noopener">
+            <img src="https://cdn.sanity.io/images/hfqi0zm0/production/da6246291aa4bc5acacc598423162a020c14d5a4-18x18.svg" 
+                 alt="Instagram" width="24" height="24">
+          </a>
+
+          <!-- Facebook -->
+          <a href="YOUR_FACEBOOK_LINK" target="_blank" rel="noopener">
+            <img src="https://cdn.sanity.io/images/hfqi0zm0/production/25917113c05bb3311a46a604826dda4e42da38dc-22x22.svg" 
+                 alt="Facebook" width="24" height="24">
+          </a>
+
+          <!-- Twitter -->
+          <a href="YOUR_TWITTER_LINK" target="_blank" rel="noopener">
+            <img src="https://cdn.sanity.io/images/hfqi0zm0/production/5ce04e99bda9fdbca2cfb140097021ecd745f870-22x22.svg" 
+                 alt="Twitter" width="24" height="24">
+          </a>
+
+          <!-- YouTube -->
+          <a href="YOUR_YOUTUBE_LINK" target="_blank" rel="noopener">
+            <img src="https://cdn.sanity.io/images/hfqi0zm0/production/36e0584f47a0dd4eaf4d9bdb9d9e2fb7d7f57df5-24x18.svg" 
+                 alt="YouTube" width="24" height="24">
+          </a>
+
+          <!-- TikTok -->
+          <a href="YOUR_TIKTOK_LINK" target="_blank" rel="noopener">
+            <img src="https://cdn.sanity.io/images/hfqi0zm0/production/cf9e89d75828b158c4e1bc09bb894d4b85bb6c0d-18x20.svg" 
+                 alt="TikTok" width="24" height="24">
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="footer-bottom">
+    <div>
+      {{ localization.country.name }} ({{ localization.country.currency.symbol }}) &nbsp;&nbsp; | &nbsp;&nbsp; {{ localization.language.endonym_name }}
+    </div>
+    <div>
+      {{ shop.name }} &nbsp; • &nbsp; Powered by Shopify
+    </div>
+    <div class="payment-icons">
+      <p>We accept</p>
+      <img src="https://cdn.shopify.com/s/files/1/0648/5298/3875/files/Container_copy.webp?v=1754471033" alt="We accept" width="300px" height="30px">
+    </div>
+  </div>
+</div>
+
+<style>
+/* Footer Strip - "Everyone Feel comfortable in cremy" */
+.footer-strip {
+    background-color: black;
+    color: white;
+    text-align: center;
+    width: 100%;
+    font-family: "TSTARPRO Headline", sans-serif;
+    font-size: 20px;
+    margin-top: 14px;
+    margin-bottom: 14px;
+    padding: 10px 0;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .footer-strip {
+        font-size: 14px;
+        margin-top: 14px;
+        margin-bottom: 14px;
+        padding: 15px 0;
+    }
+}
+
+/* Footer styles */
+.footer-wrapper {
+    background-color: #f8f8f8;
+    padding: 40px 20px 20px;
+    font-family: Arial, sans-serif;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-col h4, .footer-col h5 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-col ul li {
+    margin-bottom: 8px;
+}
+
+.footer-col ul li a {
+    color: #666;
+    text-decoration: none;
+}
+
+.footer-col ul li a:hover {
+    color: #333;
+}
+
+.footer-col.logo img {
+    max-width: 100%;
+    height: auto;
+}
+
+.footer-col p {
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.footer-col form {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.footer-col input[type="email"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+}
+
+.footer-col button {
+    padding: 10px 15px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+}
+
+.social-icons {
+    display: flex;
+    gap: 10px;
+}
+
+.social-icons a {
+    display: inline-block;
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+    color: #666;
+    font-size: 14px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.payment-icons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.payment-icons p {
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    .footer-col form {
+        flex-direction: column;
+    }
+    
+    .footer-col input[type="email"] {
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+    
+    .footer-col button {
+        border-radius: 4px;
+    }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Custom Footer",
+  "tag": "section",
+  "settings": [],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Custom Footer"
+    }
+  ]
+}
+{% endschema %}
+
+{% render 'custom-footer-css' %}

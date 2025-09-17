@@ -1,0 +1,29 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-prod-nothumbs",
+      "settings": {},
+      "blocks": [
+        { "type": "title" },
+        { "type": "price" },
+        { "type": "rating" },
+        { "type": "variant_picker" },
+        { "type": "quantity_selector" },
+        { "type": "buy_buttons" },
+        { "type": "separator" },
+        { "type": "collapsible_tab" },
+        { "type": "share" }
+      ]
+    },
+    "reco_band": {
+      "type": "reco-band",
+      "settings": {
+        "heading": "You may also like",
+        "products_to_show": 4,
+        "show_vendor": false
+      }
+    },
+    "apps": { "type": "apps" }
+  },
+  "order": ["main", "reco_band", "apps"]
+}
