@@ -25,7 +25,12 @@ details[open]>.header__menu-item,
 .header-wrapper h1.header__heading span.h2,
 .header-wrapper details>span,
 .header-wrapper .disclosure__button>span,
-.header-wrapper .disclosure__button svg {
+.header-wrapper .disclosure__button svg,
+.header-wrapper .header__menu-item.list-menu__item.link.link--text.focus-inset,
+.header-wrapper .header__inline-menu a,
+.header-wrapper .header__menu-item.list-menu__item.link--text,
+.header-wrapper .header__menu-item.link.focus-inset,
+.header-wrapper .header__active-menu-item {
     color: white !important;
     transition: color 0.3s ease;
 }
@@ -49,8 +54,13 @@ details[open]>.header__menu-item,
 .header-wrapper.scrolled h1.header__heading span.h2,
 .header-wrapper.scrolled details>span,
 .header-wrapper.scrolled .disclosure__button>span,
-.header-wrapper.scrolled .disclosure__button svg {
-    color: rgba(var(--color-foreground), .75) !important;
+.header-wrapper.scrolled .disclosure__button svg,
+.header-wrapper.scrolled .header__menu-item.list-menu__item.link.link--text.focus-inset,
+.header-wrapper.scrolled .header__inline-menu a,
+.header-wrapper.scrolled .header__menu-item.list-menu__item.link--text,
+.header-wrapper.scrolled .header__menu-item.link.focus-inset,
+.header-wrapper.scrolled .header__active-menu-item {
+    color: black !important;
 }
 
 .header-wrapper.scrolled .header-localization .disclosure .localization-form__select:hover {
@@ -262,7 +272,6 @@ document.addEventListener('DOMContentLoaded', function() {
  .header__menu-item.list-menu__item.link.link--text.focus-inset {
   font-size: 13px;
   letter-spacing: 0;
-  color: black !important;
   font-weight: 700;
   text-decoration: none;
   padding-left: 0;
@@ -274,7 +283,6 @@ document.addEventListener('DOMContentLoaded', function() {
 .header .header__menu-item.list-menu__item.link.link--text.focus-inset {
   font-size: 13px !important;
   letter-spacing: 0 !important;
-  color: black !important;
   font-weight: 700 !important;
 }
 
@@ -282,7 +290,6 @@ document.addEventListener('DOMContentLoaded', function() {
 .header__inline-menu .header__menu-item.list-menu__item.link.link--text.focus-inset {
   font-size: 13px !important;
   letter-spacing: 0 !important;
-  color: black !important;
   font-weight: 700 !important;
 }
 
@@ -296,15 +303,12 @@ document.addEventListener('DOMContentLoaded', function() {
    font-weight: 700;
    font-size: 13px;
    letter-spacing: 0;
-   color: black !important;
    padding-left: 0;
    margin-left: 0;
  }
 
- /* Ensure top-level summary spans are black (overrides grey scrolled state) */
- #shopify-section-{{ section.id }} .header__inline-menu .list-menu span,
- #shopify-section-{{ section.id }} .header-wrapper.scrolled .list-menu span {
-   color: black !important;
+ /* Ensure top-level summary spans have proper color based on header state */
+ #shopify-section-{{ section.id }} .header__inline-menu .list-menu span {
    font-size: 13px;
    letter-spacing: 0;
  }
