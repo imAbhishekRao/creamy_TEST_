@@ -2464,7 +2464,63 @@ document.addEventListener('DOMContentLoaded', function() {
   window.addEventListener('scroll', onScroll, { passive: true });
 });
 
-
+// Sticky Product Images - New Implementation
+document.addEventListener('DOMContentLoaded', function() {
+  // Only apply on desktop (750px+)
+  if (window.innerWidth < 750) return;
+  
+  const productMediaWrapper = document.querySelector('.product__media-wrapper');
+  const productInfoWrapper = document.querySelector('.product__info-wrapper');
+  
+  if (!productMediaWrapper || !productInfoWrapper) return;
+  
+  let ticking = false;
+  
+  function updateStickyImages() {
+    const scrollTop = window.scrollY;
+    const productInfoRect = productInfoWrapper.getBoundingClientRect();
+    const productInfoHeight = productInfoWrapper.offsetHeight;
+    const productInfoTop = productInfoRect.top + scrollTop;
+    const productInfoBottom = productInfoTop + productInfoHeight;
+    
+    // Calculate when product info has scrolled past the viewport
+    const viewportHeight = window.innerHeight;
+    const productInfoScrolledPast = scrollTop + viewportHeight > productInfoBottom;
+    
+    if (productInfoScrolledPast) {
+      // Product info has scrolled past, make images scroll normally
+      productMediaWrapper.classList.add('scroll-past-info');
+    } else {
+      // Product info is still visible, keep images sticky
+      productMediaWrapper.classList.remove('scroll-past-info');
+    }
+    
+    ticking = false;
+  }
+  
+  function onScroll() {
+    if (!ticking) {
+      requestAnimationFrame(updateStickyImages);
+      ticking = true;
+    }
+  }
+  
+  // Initial check
+  updateStickyImages();
+  
+  // Listen for scroll events
+  window.addEventListener('scroll', onScroll, { passive: true });
+  
+  // Listen for resize events to recalculate on screen size changes
+  window.addEventListener('resize', function() {
+    if (window.innerWidth >= 750) {
+      updateStickyImages();
+    } else {
+      // On mobile, remove sticky behavior
+      productMediaWrapper.classList.remove('scroll-past-info');
+    }
+  });
+});
 
 </script>
 

@@ -27,6 +27,21 @@ product-info {
     z-index: 2;
   }
 
+  /* Sticky product images - new implementation */
+  .product__media-wrapper {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    height: fit-content;
+    transition: all 0.3s ease;
+  }
+
+  /* When product info has scrolled past, make images scroll normally */
+  .product__media-wrapper.scroll-past-info {
+    position: relative;
+    top: auto;
+  }
+
   .product--thumbnail .thumbnail-list {
     padding-right: var(--media-shadow-horizontal-offset);
   }
